@@ -1,7 +1,14 @@
-*
+/*
 
-!**/*.tex
-!**/*.bib
 !.gitignore
 !CITATION.cff
-!/article/img/sturmtruppler.jpg
+
+!article/
+article/*
+!**/*.tex
+!**/*.bib
+!article/img/
+article/img/*
+!**/sturmtruppler.jpg
+
+!example-pdfs/

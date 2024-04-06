@@ -1,0 +1,7 @@
+*
+
+!**/*.tex
+!**/*.bib
+!.gitignore
+!CITATION.cff
+!/article/img/sturmtruppler.jpg

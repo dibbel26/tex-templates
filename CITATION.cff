@@ -1,0 +1,26 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: tex-templates
+message: >-
+  If you use this dataset, please cite it using the metadata
+  from this file.
+type: dataset
+authors:
+  - given-names: Leo Philipp
+    family-names: Knoll
+    email: leo.knoll.lk@gmail.com
+repository-code: 'https://github.com/dibbel26/tex-templates'
+abstract: >-
+  Collection of tex-templates for word-processing with
+  LuaTex
+keywords:
+  - LuaTex
+  - LaTex
+  - KOMA-Script
+  - Scientific-Article
+license: GPL-3.0
+commit: 5a227fbb4cc2d5f8518a95e06b51ef2f86c1c0b8
+date-released: '2024-04-06'
+

@@ -1,0 +1,335 @@
+%preamble
+\documentclass[singlespacing=true]{scrartcl}
+%singlespacing in header and footer
+
+% {{{ fontspec, poplyglossia, biber, microtype, lipsum
+\usepackage[]{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage[variant=british]{english}
+\setotherlanguage[babelshorthands=true]{german}
+
+\usepackage[backend=biber, style=numeric]{biblatex} %style=apa wenn gew.
+\addbibresource{refs.bib}
+
+\usepackage[final]{microtype}
+
+
+\setmainfont[
+  Ligatures={TeX},
+  SmallCapsFont={Latin Modern Roman Caps},
+  Numbers=OldStyle
+]{Latin Modern Roman}
+
+\newfontfamily{\lmodern}[Ligatures=TeX, SmallCapsFont=Latin Modern Roman Caps]%
+{Latin Modern Roman}
+
+\ifthenelse{\equal{\uselipsum}{true}}{%
+  \usepackage{lipsum}
+  \setotherlanguage[]{latin}
+}
+
+% }}}
+
+% {{{ KOMA 
+
+\KOMAoptions{%
+    fontsize=12pt,
+    abstract=true,
+    twoside=true,
+    %DIV=9,
+    %BCOR=8.25mm,
+    %twocolumn=true,
+    %headinclude=true,
+    numbers=noenddot,
+    captions=tableheading,
+    listof=totoc
+}
+
+%change BCOR (binding correction) before printing! \typearea[BCOR]{DIV} (calc
+%can be usefull) (9 rec. fs11 with DIV12 look serious. not in KOMAoptions
+%because it would trigger recalc twice! with typearea command
+%only once
+\typearea[0mm]{11}
+\recalctypearea
+
+% {{{ manual geometry
+%\usepackage[onehalfspacing]{setspace}
+%margins
+%\usepackage[left=3.5cm, right=3cm, top=3cm, bottom=2.5cm]{geometry}
+% }}}
+
+% }}}
+
+% {{{ restyle caption, literature, disposition, title, toc
+\addtokomafont{caption}{\small}
+\setkomafont{captionlabel}{\bfseries}
+
+\addto\captionsgerman{%
+ \renewcommand{\figurename}{Abb.}%
+  \renewcommand{\contentsname}{Inhaltsverzeichnis}%
+  \renewcommand{\refname}{Literaturverzeichnis}% not working for biblatex thus DefineBibliographyStrings
+  \renewcommand{\abstractname}{Abstract}%
+}
+\DefineBibliographyStrings{german}{%
+  bibliography = {Literaturverzeichnis},
+  references = {Literaturverzeichnis}
+}
+
+\addto\captionsenglish{%
+  \renewcommand{\figurename}{Fig.}%
+  \renewcommand{\contentsname}{Table of Contents}%
+  \renewcommand{\refname}{Bibliography}% not working for biblatex
+}
+\DefineBibliographyStrings{english}{%
+  bibliography = {Bibliography},
+  references = {Bibliography}
+}
+
+%make titles and headings use normal serif font
+\addtokomafont{disposition}{\rmfamily}
+\setkomafont{title}{\normalfont}
+
+%tocdepth - depth of subsections listed in Table of Content
+\setcounter{tocdepth}{2}
+%}}}
+
+% {{{ set pdf version
+\directlua{pdf.setminorversion(7)}
+%error level if current pdf is too old
+%\setpdfinclusionerrorlevel=1
+% }}}
+
+% {{{ graphics
+%graphics path. Folder in same directory. Just use relative path in document. e.g:
+%usage: \includegraphics[widht=\textwidth]{graph.jpg}
+\usepackage{graphicx}
+\graphicspath{{./img/}}%normal
+%\graphicspath{{../img/}}%WSL
+
+%float
+\usepackage{float}
+% }}}
+
+% {{{ style header
+\usepackage[
+  draft=false, headsepline, plainheadsepline
+]{scrlayer-scrpage}[2015/02/07]
+
+\pagestyle{scrheadings}
+\clearpairofpagestyles
+
+%note \lmodern should \scshape of Latin Modern Roman
+\renewcommand\sectionmark[1]{\markboth{\thesection~#1}{}}
+\renewcommand\subsectionmark[1]{\markright{\thesubsection~#1}}
+\lehead[]{\leftmark}
+\rohead[]{\rightmark}
+\ofoot[\pagemark]{\pagemark}
+\renewcommand*{\titlepagestyle}{empty}
+
+%remove headsepline on ToC and lists of figures/tables
+%\AfterTOCHead{\pagestyle{empty}}
+%\AfterStartingTOC{\clearpage}
+
+% }}}
+
+% {{{ def makros (references, roman numerals,...)
+\def\refeqA#1{[Anhang, Gleichung (\ref{#1})]}
+\def\refeq#1{(\ref{#1})}
+\def\refsec#1{[vgl.(\ref{#1})]}
+\def\refsecA#1{[vgl. Anhang(\ref{#1})]}
+\def\reffig#1{[Abbildung (\ref{#1})]}
+\def\reftab#1{[Tabelle (\ref{#1})]}
+\def\reftabA#1{[Anhang, Tabelle (\ref{#1})]}
+\newcommand{\parnewline}{\par\noindent\newline}
+
+\newcommand{\rom}[1]{\uppercase\expandafter{\romannumeral #1\relax}}
+\newcommand{\roml}[1]{\expandafter{\romannumeral #1\relax}}
+% }}}
+
+% {{{ math and tables
+
+    % {{{ amsmath and siunitx
+    \usepackage{amsmath, amssymb, amsfonts}
+
+    \newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+
+    \usepackage{siunitx}
+    \sisetup{output-decimal-marker={.},
+        separate-uncertainty=true,
+        table-alignment-mode=marker}%format
+    \DeclareSIUnit\litre{\ell}
+    \DeclareSIUnit\molar{\mole\per\cubic\ell}
+    \DeclareSIUnit\Molar{\lmodern\textsc{m}}
+    % }}}
+
+    % {{{ mdframed
+    \usepackage[framemethod=tikz]{mdframed}
+
+
+    \mdfdefinestyle{chem-style}{
+      skipabove=\topsep,
+      skipbelow=\topsep,
+      hidealllines=true,
+      backgroundcolor={background},
+      innerleftmargin=10pt,
+      innerrightmargin=10pt,
+      innertopmargin=10pt,
+      innerbottommargin=10pt
+    }
+
+    \mdtheorem[style=chem-style]{mdchem}{Formel}
+    % }}}
+
+    % {{{ amsthm and thmtools
+    \usepackage{amsthm}
+    \usepackage{thmtools}
+
+    % {{{ theorem styles
+    \declaretheoremstyle[
+      bodyfont=\itshape,
+      %
+      mdframed={
+      skipabove=\topsep,
+      skipbelow=\topsep,
+      hidealllines=true,
+      backgroundcolor={background},
+      innerleftmargin=10pt,
+      innerrightmargin=10pt,
+      innertopmargin=10pt,
+      innerbottommargin=10pt},
+    ]{mathstyle}
+
+    \declaretheoremstyle[
+      headpunct={},
+      postheadspace=0pt,
+      bodyfont=\itshape,
+      %
+      mdframed={
+      skipabove=\topsep,
+      skipbelow=\topsep,
+      hidealllines=true,
+      backgroundcolor={background},
+      innerleftmargin=10pt,
+      innerrightmargin=10pt,
+      innertopmargin=10pt,
+      innerbottommargin=10pt},
+    ]{mathstylebg}
+
+    \declaretheoremstyle[
+      headpunct={},
+      postheadspace=0pt,
+    %
+      mdframed={
+      skipabove=\topsep,
+      skipbelow=0pt,
+      hidealllines=true,
+      backgroundcolor={background},
+      innerleftmargin=10pt,
+      innerrightmargin=10pt,
+      innertopmargin=10pt,
+      innerbottommargin=10pt}
+    ]{chemstyle}
+    % }}}
+
+    % {{{ declare theorems
+    \declaretheorem[style=mathstyle,name=Definition]{exer}
+    \newenvironment{exercise}[1]
+      {\renewcommand\theexer{#1}\begin{exer}}
+      {\end{exer}}
+
+      \declaretheorem[style=mathstyle]{theorem}
+      \declaretheorem[style=mathstyle, numberwithin=section]{theoremS}
+      \declaretheorem[style=mathstyle,sibling=theorem]{lemma}
+      \declaretheorem[style=mathstyle, numberwithin=section]{rechnung}
+      \declaretheorem[style=mathstylebg, numbered=no]{Bilanz}
+
+      \declaretheorem[style=chemstyle,numbered=no,title=]{chem}
+    \newenvironment{chemenv}
+        {\begin{chem}\begin{adjustbox}{width=\linewidth}}
+        {\end{adjustbox}\end{chem}}
+    % }}}
+
+    % }}}
+
+    % {{{ have figures consecutively named
+        \usepackage{chngcntr}
+        %\counterwithout{figure}{chapter}
+        %\counterwithout{table}{chapter}
+        %\counterwithout{equation}{chapter}
+    % }}}
+
+    % {{{ tables
+    \usepackage{multirow}
+    \usepackage{adjustbox}
+    \usepackage{tikz}
+    % }}}
+
+% }}} math and tables
+
+% {{{ chemistry
+\usepackage[version=3]{mhchem}
+\mhchemoptions{textfontcommand=\lmodern}
+\usepackage{chemfig}
+\usepackage{carbohydrates}
+\usepackage{dnaseq}
+% }}}
+
+% {{{ colour, hyperrefs, url
+\usepackage{xcolor}
+%\usepackage{mdframed}
+\definecolor{background}{HTML}{e9e9ff}%chrysler White
+\definecolor{nice}{HTML}{00a62c}
+\definecolor{mblue}{HTML}{8BA6E9}
+%\definecolor{background}{HTML}{eee9e9}%Ana Skript
+
+%make refs clickable and have standard two page layout in pdf viwer
+\usepackage[pdfpagelayout=TwoPageRight]{hyperref}
+\hypersetup{
+   colorlinks   = true,    % Colours links instead of ugly boxes
+   urlcolor     = blue,    % Colour for external hyperlinks
+   linkcolor    = blue,    % Colour of internal links
+   citecolor    = blue,      % Colour of citations
+   pdfprintscaling=None
+}
+
+\usepackage{url}
+% }}}
+
+% {{{ quotes & epigraph
+\usepackage[autostyle]{csquotes}
+\usepackage{epigraph}
+
+\setlength\epigraphwidth{.8\textwidth}
+\setlength\epigraphrule{1pt}
+\AtBeginDocument{\renewcommand {\epigraphflush}{center}}
+\renewcommand{\textflush}{flushepinormal}
+\renewcommand{\sourceflush}{center}
+% }}}
+
+% {{{ pdfpages, pdflscape, enumerate
+
+%loadPdfs
+\usepackage{pdfpages}
+
+%landscape
+\usepackage{pdflscape}
+
+%enumeration with letters
+%\usepackage{enumerate}
+\usepackage{enumitem} %better
+
+% }}}
+
+% {{{ patching
+\usepackage{xpatch}
+\usepackage{etoolbox}
+\AtBeginEnvironment{abstract}{\def\sectfont{\normalsize\bfseries}}
+
+%patch mdframed
+\makeatletter
+\xpatchcmd{\endmdframed}
+  {\aftergroup\endmdf@trivlist\color@endgroup}
+  {\endmdf@trivlist\color@endgroup\@doendpe}
+  {}{}
+\makeatother
+% }}}

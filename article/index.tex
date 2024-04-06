@@ -1,0 +1,57 @@
+%{{{ input commands
+\def\uselipsum{true} % false if you do not want lipsum (removes the biblatex warning :D)
+\input{preamble}
+\directlua0{
+  pdf.setinfo ("/Title scientificArticle) "
+            .. "/Author Anakin Skywalker")
+}
+%----------------------------------------
+\title{Across the stars}
+\subtitle{A general purpose template for scientific articles.}
+\date{\today}
+\author{Anakin Skywalker}
+
+\begin{document}
+\pagenumbering{gobble}
+\KOMAoptions{twoside=false}
+\input{title}
+
+\cleardoubleoddpage
+\KOMAoptions{twoside=true}
+
+{\setmainfont{Latin Modern Roman}[ Numbers={OldStyle,Monospaced}]
+\hypersetup{linkcolor=black} \tableofcontents }
+
+\cleardoubleoddpage
+\pagenumbering{roman}
+{
+\hypersetup{linkcolor=black}
+    \listoffigures
+\cleardoubleemptypage
+    \listoftables
+}
+
+\cleardoubleoddpage
+\newpage
+\pagenumbering{arabic}
+\input{theorie}
+
+%----------------------------------------
+\appendix
+\include{appendix}
+\markboth{}{} %TODO fix as \pagestyle{plain} is not working for biblatex
+
+%tables {{{
+{\setmainfont{Latin Modern Roman}[ Numbers={OldStyle,Monospaced}] %monospace old numbers for neater Bibliography
+
+\pagestyle{plain}
+
+\nocite{loffler-2003}
+
+\cleardoubleoddpage
+\printbibliography
+}
+%----------------------------------------
+%}}}
+
+\end{document}

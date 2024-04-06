@@ -1,0 +1,10 @@
+@default_files = ('index.tex');
+#$pdflatex = 'lualatex -file-line-error $O $S';
+$pdf_mode = 4; #lualatex
+#$pdf_mode = 1;
+$show_time = 1;
+$max_repeat = 7; #respecting recompilation due to biblate/references
+set_tex_cmds("--shell-escape --synctex=1 %O %S"); #vimtex compatible synctex
+#set_tex_cmds("--synctex=1 %O %S");
+$bibtex_use = 1;
+$biber = "biber --validate-datamodel %O %S";
